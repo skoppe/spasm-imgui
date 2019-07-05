@@ -1,6 +1,6 @@
 # Wasm Imgui for D (experimental)
 
-This repo contains a WebAssembly build of imgui (C++) and cimgui (C bindings), together with a webgl backend written in D.
+This repo contains a WebAssembly build of imgui (C++) and cimgui (C bindings), together with a webgl backend written in D. See live [demo](https://skoppe.github.io/spasm-imgui/).
 
 The WebAssembly build of imgui and cimgui is done with [WASI](https://wasi.dev/). This is linked with a D program that uses [spasm](https://github.com/skoppe/spasm) to create a WebGL backend and render it to a canvas.
 
