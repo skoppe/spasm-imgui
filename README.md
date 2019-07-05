@@ -8,7 +8,7 @@ The cimgui D bindings are taken from [derelict dimgui](https://github.com/Extraw
 
 # Experimental
 
-I have only implemented the Bare Minimum (tm), some feature in the demo window don't work (e.g. filesystem, etc.)
+I have only implemented the Bare Minimum (tm), some feature in the demo window don't work (e.g. filesystem, keyboard, right-click, etc.)
 
 # Building yourself
 
