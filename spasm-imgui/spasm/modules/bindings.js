@@ -271,5 +271,14 @@ export let jsExports = {
         Event_preventDefault: (ctx) => {
             spasm.objects[ctx].preventDefault();
         },
+        Element_getBoundingClientRect: (ctx) => {
+            return spasm.addObject(spasm.objects[ctx].getBoundingClientRect());
+        },
+        DOMRect_width_Get: (ctx) => {
+            return spasm.objects[ctx].width;
+        },
+        DOMRect_height_Get: (ctx) => {
+            return spasm.objects[ctx].height;
+        },
     }
 }

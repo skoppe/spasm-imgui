@@ -37,38 +37,27 @@ struct App {
   @child Canvas canvas;
   WebGLProgram g_ShaderHandle;
   WebGLRenderingContextBase gl;
-  bool dirty;
   void onMount() @trusted {
-    addCss("body{margin:0}");
+    addCss("body{margin:0}#canvas{width:100vw;height:100vh}");
     initCanvas();
     ImGuiIO* io = igGetIO();
     canvas.node.addEventListener("mousemove",(event){
         import spasm.bindings.uievents : MouseEvent;
-        io.MousePos = ImVec2(cast(float)event.as!(MouseEvent).pageX-canvas.node.offsetLeft, cast(float)event.as!MouseEvent.pageY-canvas.node.offsetTop);
-        setDirty();
+        io.MousePos = ImVec2(cast(float)event.as!(MouseEvent).pageX, cast(float)event.as!MouseEvent.pageY);
       });
     canvas.node.addEventListener("mousedown",(event){
         io.MouseDown[0] = true;
-        setDirty();
       });
     canvas.node.addEventListener("mouseup",(event){
         io.MouseDown[0] = false;
-        setDirty();
       });
     canvas.node.addEventListener("wheel",(event){
         import spasm.bindings.uievents : WheelEvent;
         double deltaY = event.as!(WheelEvent).deltaY;
         io.MouseWheel = deltaY * -0.03;
-        setDirty();
         event.preventDefault();
       });
     render(0);
-  }
-  void setDirty() {
-    if (dirty)
-      return;
-    dirty = true;
-    window.requestAnimationFrame(&this.render);
   }
   void initCanvas() @trusted {
     igCreateContext(null);
@@ -163,19 +152,25 @@ struct App {
     igNewFrame();
   }
   void endFrame() {
-    dirty = false;
   }
   void render(double step) {
+    auto rect = canvas.node.getBoundingClientRect();
+    auto width = cast(int)rect.width;
+    auto height = cast(int)rect.height;
+    if (canvas.width != width)
+      canvas.update.width = width;
+    if (canvas.height != height)
+      canvas.update.height = height;
     newFrame();
+    igSetNextWindowPos(ImVec2(10,10));
     igShowDemoWindow();
     igRender();
-    int width = canvas.width;
-    int height = canvas.height;
     gl.viewport(0, 0, width, height);
     gl.clearColor(0.2f, 0.2f, 0.2f, 1.0f);
     gl.clear(GL.COLOR_BUFFER_BIT);
     render(igGetDrawData(), width, height);
     endFrame();
+    window.requestAnimationFrame(&this.render);
   }
   void render(ImDrawData* draw_data, int width, int height) @trusted {
     ImGuiIO* io = igGetIO();
