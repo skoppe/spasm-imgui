@@ -6,6 +6,10 @@ The WebAssembly build of imgui and cimgui is done with [WASI](https://wasi.dev/)
 
 The cimgui D bindings are taken from [derelict dimgu](https://github.com/Extrawurst/DerelictImgui) and are partially upgraded to 1.71
 
+# Experimental
+
+I have only implemented the Bare Minimum (tm), some feature in the demo window don't work (Like storing files, etc.)
+
 # Building yourself
 
 Although imgui, cimgui and WASI are already precompiled (WebAssembly is portable), you can remove the dist and the sysroot folder and run `make`. Make sure to install the following dependencies first: clang llvm ldc dub lld grep diffutils make.
