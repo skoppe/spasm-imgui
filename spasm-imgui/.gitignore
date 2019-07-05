@@ -6,3 +6,5 @@ __dummy.html
 __test__*__
 *spasm-imgui*
 node_modules
+index.html
+main.js
