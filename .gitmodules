@@ -1,0 +1,6 @@
+[submodule "cimgui"]
+	path = cimgui
+	url = https://github.com/cimgui/cimgui
+[submodule "wasi-libc"]
+	path = wasi-libc
+	url = https://github.com/CraneStation/wasi-libc
