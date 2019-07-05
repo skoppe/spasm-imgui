@@ -17,16 +17,7 @@ let addObject = (value) => {
     getObject = (ptr) => objects[ptr];
 const setupMemory = (memory) => {
     spasm.memory = memory;
-    let buffer = memory.buffer;
-    spasm.buffer = buffer;
-    // spasm.heapi32s = new Int32Array(buffer)
-    // spasm.heapi32u = new Uint32Array(buffer)
-    // spasm.heapi16s = new Int16Array(buffer)
-    // spasm.heapi16u = new Uint16Array(buffer)
-    // spasm.heapi8s = new Int8Array(buffer)
-    // spasm.heapi8u = new Uint8Array(buffer)
-    // spasm.heapf32 = new Float32Array(buffer)
-    // spasm.heapf64 = new Float64Array(buffer)
+    spasm.buffer = memory.buffer;
 }
 const spasm = {
     lastPtr: 2,
@@ -133,22 +124,13 @@ let jsExports = {
             delete objects[ctx]
         },
         DataView_Create: (len, offset) => {
-            let buffer = new DataView(spasm.memory.buffer, offset, len);
-            return addObject(buffer);
+            return addObject(new DataView(spasm.memory.buffer, offset, len));
         },
         Float32Array_Create: (len, offset) => {
-            let buffer = new Float32Array(spasm.memory.buffer, offset, len);
-            return addObject(buffer);
+            return addObject(new Float32Array(spasm.memory.buffer, offset, len));
         },
         Uint8Array_Create: (len, offset) => {
-            let buffer = new Uint8Array(spasm.memory.buffer, offset, len);
-            return addObject(buffer);
-        },
-        __cxa_guard_acquire: () => {
-            return 1
-        },
-        __cxa_guard_release: () => {
-            
+            return addObject(new Uint8Array(spasm.memory.buffer, offset, len));
         }
     }
 };

@@ -6,6 +6,13 @@ const nodes = spasm.objects;
 const addPtr = spasm.addObject;
 
 export let jsExports = {
+    env: {
+        __cxa_guard_acquire: () => {
+            return 1
+        },
+        __cxa_guard_release: () => {
+        }
+    },
     wasi_unstable: {
         fd_write: (fd,//: wasm32::__wasi_fd_t,
                    iovs,//: wasm32::uintptr_t,
