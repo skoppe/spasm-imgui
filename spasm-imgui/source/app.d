@@ -108,15 +108,15 @@ struct App {
     gl.shaderSource(g_FragHandle, fragment_shader);
     gl.compileShader(g_VertHandle);
     gl.compileShader(g_FragHandle);
-    gl.attachShader(g_ShaderHandle, g_VertHandle);
-    gl.attachShader(g_ShaderHandle, g_FragHandle);
-    gl.linkProgram(g_ShaderHandle);
+    gl.attachShader(g_ShaderHandle.toOpt, g_VertHandle);
+    gl.attachShader(g_ShaderHandle.toOpt, g_FragHandle);
+    gl.linkProgram(g_ShaderHandle.toOpt);
 
-    state.g_AttribLocationTex = gl.getUniformLocation(g_ShaderHandle, "Texture");
-    state.g_AttribLocationProjMtx = gl.getUniformLocation(g_ShaderHandle, "ProjMtx");
-    state.g_AttribLocationPosition = gl.getAttribLocation(g_ShaderHandle, "Position");
-    state.g_AttribLocationUV = gl.getAttribLocation(g_ShaderHandle, "UV");
-    state.g_AttribLocationColor = gl.getAttribLocation(g_ShaderHandle, "Color");
+    state.g_AttribLocationTex = gl.getUniformLocation(g_ShaderHandle.toOpt, "Texture");
+    state.g_AttribLocationProjMtx = gl.getUniformLocation(g_ShaderHandle.toOpt, "ProjMtx");
+    state.g_AttribLocationPosition = gl.getAttribLocation(g_ShaderHandle.toOpt, "Position");
+    state.g_AttribLocationUV = gl.getAttribLocation(g_ShaderHandle.toOpt, "UV");
+    state.g_AttribLocationColor = gl.getAttribLocation(g_ShaderHandle.toOpt, "Color");
 
     state.g_VboHandle = gl.createBuffer().front().move();
     state.g_ElementsHandle = gl.createBuffer().front().move();
@@ -131,10 +131,10 @@ struct App {
 
     // Create OpenGL texture
     state.g_FontTexture = gl.createTexture().front().move();
-    gl.bindTexture(GL.TEXTURE_2D, state.g_FontTexture);
+    gl.bindTexture(GL.TEXTURE_2D, state.g_FontTexture.toOpt);
     gl.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_MIN_FILTER, GL.NEAREST); // GL_NEAREST
     gl.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_MAG_FILTER, GL.NEAREST);
-    gl.texImage2D(GL.TEXTURE_2D, 0, GL.RGBA, width, height, 0, GL.RGBA, GL.UNSIGNED_BYTE, sumTypedPixels);
+    gl.texImage2D(GL.TEXTURE_2D, 0, GL.RGBA, width, height, 0, GL.RGBA, GL.UNSIGNED_BYTE, sumTypedPixels.toOpt);
 
     // Store our identifier
     // TODO: really needed??
@@ -145,8 +145,8 @@ struct App {
     ImFontAtlas_ClearTexData(io.Fonts);
 
     // Restore modified GL state
-    gl.bindTexture(GL.TEXTURE_2D, last_texture);
-    gl.bindBuffer(GL.ARRAY_BUFFER, last_array_buffer);
+    gl.bindTexture(GL.TEXTURE_2D, last_texture.toOpt);
+    gl.bindBuffer(GL.ARRAY_BUFFER, last_array_buffer.toOpt);
   }
   void newFrame() {
     igNewFrame();
@@ -211,7 +211,7 @@ struct App {
     gl.uniform1i(state.g_AttribLocationTex, 0);
     gl.uniformMatrix4fv(state.g_AttribLocationProjMtx, false, projection);
 
-    gl.bindBuffer(GL.ARRAY_BUFFER, state.g_VboHandle);
+    gl.bindBuffer(GL.ARRAY_BUFFER, state.g_VboHandle.toOpt);
     gl.enableVertexAttribArray(state.g_AttribLocationPosition);
     gl.enableVertexAttribArray(state.g_AttribLocationUV);
     gl.enableVertexAttribArray(state.g_AttribLocationColor);
@@ -220,8 +220,8 @@ struct App {
     gl.vertexAttribPointer(state.g_AttribLocationUV, 2, GL.FLOAT, false, ImDrawVert.sizeof, ImDrawVert.uv.offsetof);
     gl.vertexAttribPointer(state.g_AttribLocationColor, 4, GL.UNSIGNED_BYTE, true, ImDrawVert.sizeof, ImDrawVert.col.offsetof);
 
-    gl.bindBuffer(GL.ARRAY_BUFFER, state.g_VboHandle);
-    gl.bindBuffer(GL.ELEMENT_ARRAY_BUFFER, state.g_ElementsHandle);
+    gl.bindBuffer(GL.ARRAY_BUFFER, state.g_VboHandle.toOpt);
+    gl.bindBuffer(GL.ELEMENT_ARRAY_BUFFER, state.g_ElementsHandle.toOpt);
 
     foreach (n; 0..draw_data.CmdListsCount) {
       ImDrawList* cmd_list = draw_data.CmdLists[n];
@@ -248,7 +248,7 @@ struct App {
         }
         else
           {
-            gl.bindTexture(GL.TEXTURE_2D, state.g_FontTexture); // TODO: is this the font texture?
+            gl.bindTexture(GL.TEXTURE_2D, state.g_FontTexture.toOpt); // TODO: is this the font texture?
             gl.scissor(cast(int)pcmd.ClipRect.x, cast(int)(fb_height - pcmd.ClipRect.w), cast(int)(pcmd.ClipRect.z - pcmd.ClipRect.x), cast(int)(pcmd.ClipRect.w - pcmd.ClipRect.y));
             gl.drawElements(GL.TRIANGLES, cast(GLsizei)pcmd.ElemCount, GL.UNSIGNED_SHORT, idx_buffer_offset);
           }
@@ -261,9 +261,9 @@ struct App {
     gl.disableVertexAttribArray(state.g_AttribLocationUV);
     gl.disableVertexAttribArray(state.g_AttribLocationColor);
     gl.useProgram(last_program.toOpt);
-    gl.bindTexture(GL.TEXTURE_2D, last_texture);
-    gl.bindBuffer(GL.ARRAY_BUFFER, last_array_buffer);
-    gl.bindBuffer(GL.ELEMENT_ARRAY_BUFFER, last_element_array_buffer);
+    gl.bindTexture(GL.TEXTURE_2D, last_texture.toOpt);
+    gl.bindBuffer(GL.ARRAY_BUFFER, last_array_buffer.toOpt);
+    gl.bindBuffer(GL.ELEMENT_ARRAY_BUFFER, last_element_array_buffer.toOpt);
     gl.disable(GL.SCISSOR_TEST);
   }
 }
