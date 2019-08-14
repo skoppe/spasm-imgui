@@ -14,4 +14,4 @@ I have only implemented the Bare Minimum (tm), some feature in the demo window d
 
 Although imgui, cimgui and WASI are already precompiled (WebAssembly is portable), you can remove the dist and the sysroot folder and run `make`. Make sure to install the following dependencies first: clang llvm ldc dub lld grep diffutils make.
 
-Currently the D part won't compile as it depends on two small patches for `spasm` and `optional`. I hope to make a PR for both soon.
+Currently the D part won't compile as it depends on one small patch from `optional` [pull #39](https://github.com/aliak00/optional/pull/39).
