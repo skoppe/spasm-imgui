@@ -112,8 +112,10 @@ struct App {
     gl.attachShader(g_ShaderHandle.toOpt, g_FragHandle);
     gl.linkProgram(g_ShaderHandle.toOpt);
 
-    state.g_AttribLocationTex = gl.getUniformLocation(g_ShaderHandle.toOpt, "Texture");
-    state.g_AttribLocationProjMtx = gl.getUniformLocation(g_ShaderHandle.toOpt, "ProjMtx");
+    auto texLoc = gl.getUniformLocation(g_ShaderHandle.toOpt, "Texture");
+    texLoc.move(state.g_AttribLocationTex);
+    auto projMtxLoc = gl.getUniformLocation(g_ShaderHandle.toOpt, "ProjMtx");
+    projMtxLoc.move(state.g_AttribLocationProjMtx);
     state.g_AttribLocationPosition = gl.getAttribLocation(g_ShaderHandle.toOpt, "Position");
     state.g_AttribLocationUV = gl.getAttribLocation(g_ShaderHandle.toOpt, "UV");
     state.g_AttribLocationColor = gl.getAttribLocation(g_ShaderHandle.toOpt, "Color");
@@ -233,11 +235,11 @@ struct App {
       auto vertexBuffer = DataView.create((cast(ubyte*)cmd_list.VtxBuffer.Data)[0..ImDrawVert.sizeof * cmd_list.VtxBuffer.Size]);
       auto indexBuffer = DataView.create((cast(ubyte*)cmd_list.IdxBuffer.Data)[0..ImDrawIdx.sizeof * cmd_list.IdxBuffer.Size]);
 
-      auto vBuffer = Optional!(BufferDataSource)(BufferDataSource(vertexBuffer.move()));
-      auto iBuffer = Optional!(BufferDataSource)(BufferDataSource(indexBuffer.move()));
+      auto vBuffer = BufferDataSource(vertexBuffer.move());
+      auto iBuffer = BufferDataSource(indexBuffer.move());
 
-      gl.bufferData(GL.ARRAY_BUFFER, vBuffer, GL.STREAM_DRAW);
-      gl.bufferData(GL.ELEMENT_ARRAY_BUFFER, iBuffer, GL.STREAM_DRAW);
+      gl.bufferData(GL.ARRAY_BUFFER, vBuffer.toOpt, GL.STREAM_DRAW);
+      gl.bufferData(GL.ELEMENT_ARRAY_BUFFER, iBuffer.toOpt, GL.STREAM_DRAW);
 
       auto cmdCnt = cmd_list.CmdBuffer.Size;
 
